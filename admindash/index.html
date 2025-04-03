@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../icons/nttcmis.png">
+    <title>Login - Gradient Theme</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            /* More dominant black and blue in the gradient */
+            background: linear-gradient(135deg, #000000 0%, #0a2463 50%, #001233 100%);
+            background-attachment: fixed;
+            color: #fff;
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            display: flex;
+            max-width: 900px;
+            background: rgba(0, 18, 51, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+        }
+
+        .login-image {
+            flex: 1;
+            background: linear-gradient(135deg, #0a2463 0%, #001233 100%);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .login-image h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .login-image p {
+            color: #b8c7ff;
+            margin-bottom: 30px;
+        }
+
+        .login-form {
+            flex: 1;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+        }
+
+        .form-header h1 {
+            font-size: 28px;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: #b8c7ff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #0066cc;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.2);
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .form-check-input {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            accent-color: #0066cc;
+        }
+
+        .form-check-label {
+            color: #b8c7ff;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #0066cc, #004080);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 102, 204, 0.3);
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #b8c7ff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .forgot-password:hover {
+            color: #fff;
+        }
+
+        .signup-link {
+            margin-top: 30px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .signup-link p {
+            color: #b8c7ff;
+            margin-bottom: 10px;
+        }
+
+        .signup-link a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .signup-link a:hover {
+            color: #fff;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .logo {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .container {
+                padding: 0;
+            }
+
+            .login-container {
+                flex-direction: column;
+                max-width: 100%;
+                margin: 0;
+            }
+
+            .login-image {
+                padding: 20px;
+                order: 1;
+                background: linear-gradient(135deg, #0a2463 0%, #001233 100%);
+                border-radius: 10px 10px 0 0;
+            }
+
+            .login-image h2 {
+                font-size: 24px;
+            }
+
+            .login-image p {
+                font-size: 14px;
+            }
+
+            .login-form {
+                padding: 20px;
+                order: 2;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 0 0 10px 10px;
+            }
+
+            .form-header h1 {
+                font-size: 24px;
+            }
+
+            .form-header p {
+                font-size: 14px;
+            }
+
+            .logo {
+                position: relative;
+                top: 0;
+                left: 0;
+                display: block;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .form-control {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-image img {
+                max-width: 100px;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            .form-check {
+                margin-bottom: 15px;
+            }
+
+            .forgot-password {
+                margin-top: 15px;
+            }
+
+            .signup-link {
+                margin-top: 20px;
+                padding-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-button">← Back to Home</a>
+        <div class="login-container">
+            <div class="login-image">
+                <h2>Welcome Back</h2>
+                <p>Please enter your credentials NTTC Focal to view Admin Dashboard</p>
+                <img src="../icons/tlogo.png" alt="Company Logo" style="max-width: 150px; margin-bottom: 20px;">
+            </div>
+            <div class="login-form">
+                <div class="form-header">
+                    <h1>Login</h1>
+                    <p>Please enter your credentials to continue</p>
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="user">Username</label>
+                        <input type="user" id="user" class="form-control" placeholder="Enter your Username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="remember" class="form-check-input">
+                        <label for="remember" class="form-check-label">Remember me</label>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                    <div id="loginMessage" style="margin-top: 15px; color: #ff6b6b; text-align: center; display: none;"></div>
+                    <div class="signup-link">
+                        <p>Don't have an account?</p>
+                        <a href="#">Create an account</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const username = document.getElementById('user').value;
+            const password = document.getElementById('password').value;
+
+            // Fetch credentials from credentials.json
+            fetch('credentials.json')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); // Log fetched data
+                    if (data.users && Array.isArray(data.users)) {
+                        const user = data.users.find(u => u.username === username);
+                        if (user) {
+                            if (user.password === password) {
+                                // Store session before redirecting
+                                localStorage.setItem('isAuthenticated', 'true');
+                                window.location.href = 'onaf.html'; // Redirect to secured page
+                            } else {
+                                document.getElementById('loginMessage').innerText = 'Invalid credentials. Please try again.';
+                                document.getElementById('loginMessage').style.display = 'block';
+                            }
+                        } else {
+                            document.getElementById('loginMessage').innerText = 'Invalid credentials. Please try again.';
+                            document.getElementById('loginMessage').style.display = 'block';
+                        }
+                    } else {
+                        console.error('Fetched data does not contain users array:', data);
+                        document.getElementById('loginMessage').innerText = 'Error fetching credentials.';
+                        document.getElementById('loginMessage').style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching credentials:', error);
+                });
+        });
+    </script>
+</body>
+</html>
