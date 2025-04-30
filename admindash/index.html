@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../icons/nttcmis.png">
+    <title>Login - Gradient Theme</title>
+    <style>
+        :root {
+            --primary-color: #0066cc;
+            --primary-dark: #004080;
+            --text-light: #b8c7ff;
+            --bg-dark: #000000;
+            --bg-blue: #0a2463;
+            --bg-blue-dark: #001233;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-blue) 50%, var(--bg-blue-dark) 100%);
+            background-attachment: fixed;
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .login-container {
+            display: flex;
+            max-width: 900px;
+            background: rgba(0, 18, 51, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transform: translateY(0);
+            transition: transform var(--transition-speed);
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .login-image {
+            flex: 1;
+            background: linear-gradient(135deg, var(--bg-blue) 0%, var(--bg-blue-dark) 100%);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .login-image img {
+            max-width: 150px;
+            margin-bottom: 20px;
+            transition: transform var(--transition-speed);
+        }
+
+        .login-image img:hover {
+            transform: scale(1.05);
+        }
+
+        .login-image h2 {
+            font-size: clamp(24px, 4vw, 32px);
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .login-image p {
+            color: var(--text-light);
+            margin-bottom: 30px;
+            font-size: clamp(14px, 2vw, 16px);
+        }
+
+        .login-form {
+            flex: 1;
+            padding: clamp(20px, 4vw, 40px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+        }
+
+        .form-header h1 {
+            font-size: clamp(24px, 3vw, 28px);
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: var(--text-light);
+            font-size: clamp(14px, 1.5vw, 16px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #fff;
+            font-weight: 500;
+            font-size: clamp(14px, 1.5vw, 16px);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: clamp(14px, 1.5vw, 16px);
+            transition: all var(--transition-speed);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .form-check-input {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+        }
+
+        .form-check-label {
+            color: var(--text-light);
+            font-size: clamp(14px, 1.5vw, 16px);
+            cursor: pointer;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary-color);
+            color: #fff;
+            font-size: clamp(14px, 1.5vw, 16px);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color var(--transition-speed);
+            font-size: clamp(14px, 1.5vw, 16px);
+        }
+
+        .forgot-password:hover {
+            color: #fff;
+        }
+
+        .signup-link {
+            margin-top: 30px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .signup-link p {
+            color: var(--text-light);
+            margin-bottom: 10px;
+            font-size: clamp(14px, 1.5vw, 16px);
+        }
+
+        .signup-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color var(--transition-speed);
+            font-size: clamp(14px, 1.5vw, 16px);
+        }
+
+        .signup-link a:hover {
+            color: #fff;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all var(--transition-speed);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: clamp(14px, 1.5vw, 16px);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        #loginMessage {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            font-size: clamp(14px, 1.5vw, 16px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .login-container {
+                flex-direction: column;
+                margin: 20px 0;
+            }
+
+            .login-image {
+                padding: clamp(20px, 4vw, 40px);
+                border-radius: 15px 15px 0 0;
+            }
+
+            .login-form {
+                border-radius: 0 0 15px 15px;
+            }
+
+            .back-button {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .login-container {
+                margin: 10px 0;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            .form-check {
+                margin-bottom: 15px;
+            }
+
+            .forgot-password {
+                margin-top: 15px;
+            }
+
+            .signup-link {
+                margin-top: 20px;
+                padding-top: 15px;
+            }
+        }
+
+        @media (hover: none) {
+            .login-container:hover {
+                transform: none;
+            }
+
+            .btn:hover {
+                transform: none;
+                box-shadow: none;
+            }
+
+            .back-button:hover {
+                transform: none;
+            }
+        }
+
+        .registration-container {
+            display: none;
+            max-width: 900px;
+            background: rgba(0, 18, 51, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transform: translateY(0);
+            transition: transform var(--transition-speed);
+        }
+
+        .registration-container.show {
+            display: flex;
+        }
+
+        .toggle-form {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-light);
+        }
+
+        .toggle-form a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color var(--transition-speed);
+        }
+
+        .toggle-form a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-button">← Back to Home</a>
+        <div class="login-container" id="loginContainer">
+            <div class="login-image">
+                <h2>Welcome Back</h2>
+                <p>Please enter your credentials NTTC Focal to view Admin Dashboard</p>
+                <img src="../icons/tlogo.png" alt="Company Logo" style="max-width: 150px; margin-bottom: 20px;">
+            </div>
+            <div class="login-form">
+                <div class="form-header">
+                    <h1>Login</h1>
+                    <p>Please enter your credentials to continue</p>
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="user">Email</label>
+                        <input type="email" id="user" class="form-control" placeholder="Enter your email address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="remember" class="form-check-input">
+                        <label for="remember" class="form-check-label">Remember me</label>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                    <div id="loginMessage" style="margin-top: 15px; color: #ff6b6b; text-align: center; display: none;"></div>
+                    <div class="toggle-form">
+                        <p>Don't have an account? <a href="#" id="showRegister">Register here</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="registration-container" id="registerContainer">
+            <div class="login-image">
+                <h2>Create Account</h2>
+                <p>Register as an NTTC Focal to access the Admin Dashboard</p>
+                <img src="../icons/tlogo.png" alt="Company Logo" style="max-width: 150px; margin-bottom: 20px;">
+            </div>
+            <div class="login-form">
+                <div class="form-header">
+                    <h1>Register</h1>
+                    <p>Please fill in your details to create an account</p>
+                </div>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" class="form-control" placeholder="Enter your email address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" class="form-control" placeholder="Create a password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm your password" required>
+                    </div>
+                    <button type="submit" class="btn">Register</button>
+                    <div id="registerMessage" style="margin-top: 15px; color: #ff6b6b; text-align: center; display: none;"></div>
+                    <div class="toggle-form">
+                        <p>Already have an account? <a href="#" id="showLogin">Login here</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAmgjzLx4mVkeWyfjwKNMtxmL9o1BesaW0",
+            authDomain: "sampleform-fd82e.firebaseapp.com",
+            databaseURL: "https://sampleform-fd82e-default-rtdb.firebaseio.com",
+            projectId: "sampleform-fd82e",
+            storageBucket: "sampleform-fd82e.appspot.com",
+            messagingSenderId: "129137441476",
+            appId: "1:129137441476:web:e29e8ca547b93aa1d3a791",
+            measurementId: "G-DZMYEG4NHL"
+        };
+
+        try {
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+
+            // Enable persistence
+            auth.setPersistence('local')
+                .catch((error) => {
+                    console.error('Persistence error:', error);
+                });
+
+            // Check if user is already logged in
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    // Check if this is a logout redirect
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const isLogout = urlParams.get('logout');
+                    
+                    if (!isLogout) {
+                        window.location.href = 'onaf.html';
+                    }
+                }
+            });
+
+            // Handle login form submission
+            document.getElementById('loginForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                const email = document.getElementById('user').value;
+                const password = document.getElementById('password').value;
+                const loginMessage = document.getElementById('loginMessage');
+                
+                // Show loading state
+                const submitButton = this.querySelector('button[type="submit"]');
+                const originalText = submitButton.textContent;
+                submitButton.disabled = true;
+                submitButton.textContent = 'Logging in...';
+                
+                // Sign in with Firebase Authentication
+                signInWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        // Login successful
+                        window.location.href = 'onaf.html';
+                    })
+                    .catch((error) => {
+                        console.error('Login error:', error);
+                        let errorMessage = 'Invalid email or password';
+                        
+                        switch (error.code) {
+                            case 'auth/invalid-email':
+                                errorMessage = 'Invalid email format';
+                                break;
+                            case 'auth/user-not-found':
+                                errorMessage = 'No account found with this email';
+                                break;
+                            case 'auth/wrong-password':
+                                errorMessage = 'Incorrect password';
+                                break;
+                            case 'auth/too-many-requests':
+                                errorMessage = 'Too many failed attempts. Please try again later';
+                                break;
+                            case 'auth/invalid-credential':
+                                errorMessage = 'Authentication failed. Please check your credentials and try again.';
+                                break;
+                            case 'auth/network-request-failed':
+                                errorMessage = 'Network error. Please check your internet connection.';
+                                break;
+                            default:
+                                errorMessage = 'Login failed: ' + error.message;
+                        }
+                        
+                        loginMessage.innerText = errorMessage;
+                        loginMessage.style.display = 'block';
+                        
+                        // Reset button state
+                        submitButton.disabled = false;
+                        submitButton.textContent = originalText;
+                    });
+            });
+
+            // Handle registration form submission
+            document.getElementById('registerForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                const email = document.getElementById('registerEmail').value;
+                const password = document.getElementById('registerPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const registerMessage = document.getElementById('registerMessage');
+                
+                // Validate passwords match
+                if (password !== confirmPassword) {
+                    registerMessage.innerText = 'Passwords do not match';
+                    registerMessage.style.display = 'block';
+                    return;
+                }
+
+                // Validate password strength
+                if (password.length < 6) {
+                    registerMessage.innerText = 'Password must be at least 6 characters long';
+                    registerMessage.style.display = 'block';
+                    return;
+                }
+                
+                // Show loading state
+                const submitButton = this.querySelector('button[type="submit"]');
+                const originalText = submitButton.textContent;
+                submitButton.disabled = true;
+                submitButton.textContent = 'Registering...';
+                
+                // Create user with Firebase Authentication
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        // Registration successful
+                        registerMessage.style.color = '#28a745';
+                        registerMessage.innerText = 'Registration successful! You can now login.';
+                        registerMessage.style.display = 'block';
+                        
+                        // Clear form
+                        this.reset();
+                        
+                        // Switch to login form after 2 seconds
+                        setTimeout(() => {
+                            document.getElementById('registerContainer').classList.remove('show');
+                            document.getElementById('loginContainer').style.display = 'flex';
+                            document.getElementById('user').value = email;
+                            registerMessage.style.display = 'none';
+                        }, 2000);
+                    })
+                    .catch((error) => {
+                        console.error('Registration error:', error);
+                        let errorMessage = 'Registration failed';
+                        
+                        switch (error.code) {
+                            case 'auth/email-already-in-use':
+                                errorMessage = 'This email is already registered';
+                                break;
+                            case 'auth/invalid-email':
+                                errorMessage = 'Invalid email format';
+                                break;
+                            case 'auth/operation-not-allowed':
+                                errorMessage = 'Registration is currently disabled';
+                                break;
+                            case 'auth/weak-password':
+                                errorMessage = 'Password is too weak';
+                                break;
+                            default:
+                                errorMessage = 'Registration failed: ' + error.message;
+                        }
+                        
+                        registerMessage.innerText = errorMessage;
+                        registerMessage.style.display = 'block';
+                        
+                        // Reset button state
+                        submitButton.disabled = false;
+                        submitButton.textContent = originalText;
+                    });
+            });
+
+            // Form toggle functionality
+            document.getElementById('showRegister').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('registerContainer').classList.add('show');
+            });
+
+            document.getElementById('showLogin').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('registerContainer').classList.remove('show');
+                document.getElementById('loginContainer').style.display = 'flex';
+            });
+
+        } catch (error) {
+            console.error('Firebase initialization error:', error);
+            const loginMessage = document.getElementById('loginMessage');
+            loginMessage.innerText = 'Error initializing Firebase. Please try again later.';
+            loginMessage.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

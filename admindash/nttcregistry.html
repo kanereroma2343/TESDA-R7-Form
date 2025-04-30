@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NTTC Registry</title>
+    <style>
+        :root {
+            --gradient-start: #1a1a1a;
+            --gradient-mid: #2a4a2a;
+            --gradient-end: #ffffff;
+            --modal-bg: rgba(0, 0, 0, 0.7);
+            --modal-content-bg: #fff;
+            --modal-border: #888;
+            --modal-close-color: #aaa;
+            --modal-close-hover-color: #000;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            color: var(--gradient-mid);
+            border-bottom: 2px solid var(--gradient-mid);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 2em;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid var(--gradient-mid);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid var(--gradient-mid);
+        }
+
+        th {
+            background-color: var(--gradient-mid);
+            color: var(--gradient-end);
+            font-weight: bold;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(42, 74, 42, 0.05);
+        }
+
+        tr:hover {
+            background-color: rgba(42, 74, 42, 0.1);
+        }
+
+        .alert {
+            background-color: rgba(42, 74, 42, 0.1);
+            border: 1px solid var(--gradient-mid);
+            color: var(--gradient-mid);
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .copy-button {
+            background-color: var(--gradient-mid);
+            color: var(--gradient-end);
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 16px;
+            margin: 20px auto 0;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .copy-button:hover {
+            background-color: var(--gradient-start);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+        }
+
+        /* Add styles for logos */
+        .logo {
+            width: 50px; /* Adjust size as needed */
+            height: auto;
+            vertical-align: middle; /* Align logos with text */
+        }
+        .header {
+            display: flex;
+            justify-content: center; /* Change to center the header */
+            align-items: center; /* Center vertically */
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: var(--modal-bg); 
+        }
+
+        .modal-content {
+            background-color: var(--modal-content-bg);
+            margin: 15% auto; 
+            padding: 20px;
+            border: 1px solid var(--modal-border);
+            border-radius: 8px; /* Rounded corners */
+            width: 80%; 
+            max-width: 500px; /* Max width for larger screens */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+            animation: pop 0.3s ease; /* Add pop animation */
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .close-button {
+            color: var(--modal-close-color);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: var(--modal-close-hover-color);
+            text-decoration: none;
+        }
+
+        /* Modal text styling */
+        .modal-content p {
+            margin: 0; /* Remove default margin */
+            font-size: 16px; /* Font size for the message */
+            text-align: center; /* Center the text */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="header">
+            <img src="../icons/tlogo.png" alt="Left Logo" class="logo"> <!-- Left Logo -->
+            NTTC Registry Data
+            <img src="../icons/blogo.png" alt="Right Logo" class="logo"> <!-- Right Logo -->
+        </h1>
+        <div id="dataDisplay"></div>
+        <div>
+            <button id="copyButton" class="copy-button" style="display:none;">Copy Data</button>
+            <button id="redirectButton" class="copy-button" style="display:none;">Go to Form</button>
+        </div>
+        
+    </div>
+    <div id="modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <p>NTTC Data is copied and ready for import!</p>
+        </div>
+    </div>
+    <script>
+        // Function to format date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const dataDisplay = document.getElementById('dataDisplay');
+            const copyButton = document.getElementById('copyButton');
+            const data = JSON.parse(localStorage.getItem('nttcData'));
+    
+            if (data) {
+                // Reorder keys into sections while maintaining the same order
+                const orderedSections = {
+                    personalInfo: [
+                        'last_name', 'first_name', 'middle_initial', 'extension', 'birthdate', 'sex'
+                    ],
+                    contactInfo: [
+                        'address', 'email', 'contact_number'
+                    ],
+                    trainingInfo: [
+                        'educational_attainment', 'training_institution', 'type_training_institution',
+                        'training_hours', 'years_of_experience', 'sector', 'qualification', 
+                    ],
+                    certificationInfo: [
+                        'nc_cert_number', 'nc_date_issuance', 'nc_validity',
+                        'tm_cert_number', 'tm_date_issuance', 'tm_validity',
+                      
+                    ],
+                    assessors: [
+                        'assessor1', 'assessor2', 'assessor3', 'nttcstatus',
+                    ]
+                };
+    
+                let html = '';
+                html += '<table><tbody>';
+                let rowCount = 0; // Initialize row count
+                // Populate table rows with data
+                for (const section in orderedSections) {
+                    orderedSections[section].forEach(key => {
+                        if (rowCount % 5 === 0) { // Start a new row every 5 items
+                            if (rowCount > 0) html += '</tr>'; // Close previous row if not the first
+                            html += '<tr>'; // Open a new row
+                        }
+                        // Populate cells
+                        html += `<td>${key.replace(/_/g, ' ').toUpperCase()}: ${
+                            key === 'middle_initial' ? (data[key] && data[key].length > 0 ? data[key][0].toUpperCase() + '.' : '') :
+                            key === 'sector' || key === 'qualification' ? (data[key] ? data[key].toUpperCase() : '') :
+                            key === 'tm_cert_number' ? (data[key] ? 'TMC-' + data[key] : '') :
+                            data[key] ? (['birthdate', 'nc_date_issuance', 'nc_validity', 'tm_date_issuance', 'tm_validity'].includes(key) ? formatDate(data[key]) : data[key].toString().toUpperCase()) : ''
+                        }</td>`;
+                        rowCount++; // Increment row count
+                    });
+                }
+                html += '</tr></tbody></table>';
+    
+                dataDisplay.innerHTML = html;
+    
+                // Enable and handle copy functionality
+                copyButton.style.display = 'block';
+                copyButton.addEventListener('click', function() {
+                    let copyText = [];
+    
+                    // Extract data in the specified order
+                    for (const section in orderedSections) {
+                        orderedSections[section].forEach(key => {
+                            copyText.push(
+                                key === 'middle_initial' ? (data[key] && data[key].length > 0 ? data[key][0].toUpperCase() + '.' : 'N/A') :
+                                key === 'extension' ? (data[key] ? data[key] : '') :
+                                key === 'sector' || key === 'qualification' ? (data[key] ? data[key].toUpperCase() : 'N/A') :
+                                key === 'tm_cert_number' ? (data[key] ? 'TMC-' + data[key] : 'N/A') :
+                                data[key] ? (['birthdate', 'nc_date_issuance', 'nc_validity', 'tm_date_issuance', 'tm_validity'].includes(key) ? formatDate(data[key]) : data[key]) : 'N/A'
+                            );
+                        });
+                    }
+    
+                    // Join all values with tabs for horizontal copying
+                    const clipboardData = copyText.join('\t');
+    
+                    // Copy to clipboard
+                    navigator.clipboard.writeText(clipboardData).then(() => {
+                        // Show modal instead of alert
+                        document.getElementById('modal').style.display = 'block';
+                    }).catch(err => {
+                        console.error('Error copying to clipboard: ', err);
+                    });
+                });
+            } else {
+                dataDisplay.innerHTML = '<p class="alert">No data available.</p>';
+            }
+        });
+
+        // Close modal functionality
+        document.querySelector('.close-button').addEventListener('click', function() {
+            document.getElementById('modal').style.display = 'none';
+        });
+
+        // Enable and handle redirect functionality
+        document.getElementById('redirectButton').style.display = 'block'; // Show the new button
+        document.getElementById('redirectButton').addEventListener('click', function() {
+            if (confirm('Is the transaction finished?')) {
+                window.location.href = 'form.html'; // Redirect to form.html
+            }
+        });
+    </script>
+    
+</body>
+</html>
+

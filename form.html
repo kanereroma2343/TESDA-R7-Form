@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="icons/nttcmis.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Form</title>
+    <style>
+        :root {
+            --primary-color: #ff0000;
+            --secondary-color: #f0f4f8;
+            --accent-color: #ffa500;
+            --text-color: #333;
+            --border-color: #000000;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--secondary-color);
+        }
+
+        .container {
+            max-width: 2000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h2, h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+        }
+
+        .form-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        input[type="email"],
+        input[type="time"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        select[multiple] {
+            height: auto;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #004a6e;
+        }
+
+        .btn-secondary {
+            background-color: var(--accent-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e69500;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            h3 {
+                font-size: 1.2rem;
+            }
+
+            .form-container {
+                padding: 15px;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            .btn {
+                padding: 12px 18px;
+                font-size: 16px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            input[type="text"],
+            input[type="date"],
+            input[type="number"],
+            input[type="email"],
+            input[type="time"],
+            select,
+            textarea {
+                font-size: 14px;
+            }
+
+            label {
+                font-size: 14px;
+            }
+
+            #photo-upload {
+                width: 100%;
+                padding: 10px;
+            }
+        }
+        @media (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    .form-container {
+        padding: 10px;
+    }
+
+    label {
+        font-size: 14px;
+    }
+}
+
+
+        #page2 {
+            display: none;
+        }
+        @media print {
+            .grid {
+                display: grid !important;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+            }
+
+            body {
+                background-color: white !important;
+                color: black !important;
+            }
+
+            .btn {
+                display: none;
+            }
+
+            #photo-upload {
+                display: none;
+            }
+        }
+
+        .fixed-container {
+            width: 1750px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .fixed-container {
+                width: 100%;
+                padding: 10px;
+            }
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.5s;
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto; 
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 80%; 
+            max-width: 500px;
+            transform: scale(0.7);
+            animation: scaleUp 0.5s forwards;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes scaleUp {
+            from {
+                transform: scale(0.7);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: #ff0000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        button {
+            background-color: #ff0000;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #e60000;
+        }
+
+        .missing-field {
+            border: 2px solid red; /* Highlight with red border */
+            animation: blink 1s infinite; /* Add blinking effect */
+        }
+
+        @keyframes blink {
+            0% { background-color: #fff; }
+            50% { background-color: #ffcccc; }
+            100% { background-color: #fff; }
+        }
+    </style>
+    <script>
+        // Function to get URL parameters
+        function getUrlParameters() {
+            const params = new URLSearchParams(window.location.search);
+            return Object.fromEntries(params.entries());
+        }
+
+        // Function to populate form fields
+        function populateForm() {
+            const params = getUrlParameters();
+            
+            // Helper function to set field value
+            const setFieldValue = (fieldId, value) => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.value = value;
+                    // Trigger input event to handle any oninput handlers
+                    field.dispatchEvent(new Event('input'));
+                }
+            };
+
+            // Populate all form fields
+            Object.entries(params).forEach(([key, value]) => {
+                if (value) {
+                    setFieldValue(key, value);
+                }
+            });
+
+            // Handle special cases for arrays (educational background, work experiences, etc.)
+            try {
+                if (params.educationalBackground) {
+                    const educationalBackground = JSON.parse(params.educationalBackground);
+                    // Handle educational background data
+                }
+                if (params.workExperiences) {
+                    const workExperiences = JSON.parse(params.workExperiences);
+                    // Handle work experiences data
+                }
+                if (params.trainingSeminars) {
+                    const trainingSeminars = JSON.parse(params.trainingSeminars);
+                    // Handle training seminars data
+                }
+            } catch (error) {
+                console.error('Error parsing JSON data:', error);
+            }
+        }
+
+        // Call populateForm when the page loads
+        window.addEventListener('load', populateForm);
+    </script>
+</head>
+<body>
+    <div class="fixed-container">
+        <form id="tesdaForm">
+            <div id="page1" class="form-container">
+                <div class="form-section">
+                    <header style="padding: 10px; display: flex; align-items: flex-start; justify-content: flex-start;">
+                        <div style="display: flex; align-items: center;">
+                            <img src="icons/tlogo.png" alt="Logo" style="width: 100px; height: auto; margin-right: 20px;">
+                            <div>
+                                <h1 style="margin: 0; font-size: 2rem;">Technical Education and Skills Development Authority</h1>
+                                <h3 style="margin: 0;">Pangasiwaan sa Edukasyong Teknikal at Pagpapaunlad ng Kasanayan</h3>
+                            </div>
+                        </div>
+                        <div 
+                        style="flex: 0 1 400px; height: 400px; background-color: #f0f4f8; border: 2px solid var(--border-color); margin-left: auto; margin-right: 20px; position: relative;">                   
+                            <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #aaa; font-size: 1.2rem;">ID PICTURE (2"x 2" size)</span>
+                        </div>
+                    </header>
+                    <div style="text-align: center; margin-top: 10px;">
+                        <hr style="border: 1px solid var(--border-color); width: 40%; margin: 0 auto;">
+                        <span style="display: block; margin-top: 5px; font-size: 1rem;">Applicant's Signature</span>
+                    </div>                    
+                    <h2>1. To be accomplished by TESDA</h2>
+                    <div class="form-section">
+                        <div class="grid">
+                            <div class="form-group">
+                                <label for="nmis-code">1.1. NMIS Manpower Code:</label>
+                                <input type="text" id="nmis-code" name="nmis-code" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="nmis-date">1.2. NMIS Entry Date:</label>
+                                <input type="date" id="nmis-date" name="nmis-date" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="form-section">
+                    <h2>2. Manpower Profile</h2>
+                    <div class="grid">
+                        <div class="form-group">
+                            <label for="last-name">Last Name:*</label>
+                            <input type="text" id="last_name" name="last-name" required oninput="this.value = this.value.toUpperCase();">
+                        </div>
+                        <div class="form-group">
+                            <label for="first-name">First Name:*</label>
+                            <input type="text" id="first_name" name="first-name" required oninput="this.value = this.value.toUpperCase();">
+                        </div>
+                        <div class="form-group">
+                            <label for="middle-name">Middle Name:*</label>
+                            <input type="text" id="middle_initial" name="middle-name" oninput="this.value = this.value.toUpperCase();">
+                        </div>
+                        <div class="form-group">
+                            <label for="extension">Extension:</label>
+                            <input type="text" id="extension" name="extension" oninput="this.value = this.value.toUpperCase();">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">2.2. Mailing Address:*</label>
+                        <input type="text" id="address" name="address" required>
+                    </div>
+                    <div class="grid">
+                        <div class="form-group">
+                            <label for="city">City:</label>
+                            <input type="text" id="city" name="city" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="province">Province:</label>
+                            <input type="text" id="province" name="province" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="region">Region:</label>
+                            <input type="text" id="region" name="region" required>
+                        </div>
+                    </div>
+                    <div class="grid">
+                        <div class="form-group">
+                            <label for="zip-code">Zip Code:</label>
+                            <input type="text" id="zip-code" name="zip-code" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="po-box">P.O. Box No.:</label>
+                            <input type="text" id="po-box" name="po-box">
+                        </div>
+                    </div>
+                    <div class="grid">
+                        <div class="form-group">
+                            <label for="sex">2.3. Sex:*</label>
+                            <select id="sex" name="sex" required>
+                                <option value="">Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="civil-status">2.4. Civil Status:</label>
+                            <select id="civil-status" name="civil-status" required>
+                                <option value="">Select</option>
+                                <option value="single">Single</option>
+                                <option value="married">Married</option>
+                                <option value="widowed">Widowed</option>
+                                <option value="separated">Separated</option>
+                                <option value="others">Others</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid">
+                        <div class="form-group">
+                            <label for="contact">2.5. Contact Number(s):</label>
+                            <input type="text" id="contact" name="contact" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telephone">Telephone:</label>
+                            <input type="text" id="telephone" name="telephone">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:*</label>
+                            <input type="email" id="email" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="fax">Fax:</label>
+                            <input type="text" id="fax" name="fax">
+                        </div>
+                    </div>
+                    <div class="grid">
+                        <div class="form-group">
+                            <label for="employment-type">2.6. Employment Type:</label>
+                            <select id="employment-type" name="employment-type" required>
+                                <option value="">Select</option>
+                                <option value="employed">Employed</option>
+                                <option value="self-employed">Self-employed</option>
+                                <option value="unemployed">Unemployed</option>
+                                <option value="other">Other than above</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="employment-status">2.7. Employment Status:</label>
+                            <select id="employment-status" name="employment-status" required>
+                                <option value="">Select</option>
+                                <option value="casual">Casual</option>
+                                <option value="contractual">Contractual</option>
+                                <option value="job-order">Job Order</option>
+                                <option value="temporary">Temporary</option>
+                                <option value="probationary">Probationary</option>
+                                <option value="regular">Regular</option>
+                                <option value="permanent">Permanent</option>
+                                <option value="student">Student</option>
+                                <option value="trainee">Trainee/OJT</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="form-section">
+                    <h2>3. Personal Information</h2>
+                    <div class="grid">
+                        <div class="form-group">
+                            <label for="birthdate">3.1. Birthdate:*</label>
+                            <input type="date" id="birthdate" name="birthdate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="birthplace">3.2. Birth Place:</label>
+                            <input type="text" id="birthplace" name="birthplace" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="citizenship">3.3. Citizenship:</label>
+                            <input type="text" id="citizenship" name="citizenship" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="religion">3.4. Religion:</label>
+                            <input type="text" id="religion" name="religion">
+                        </div>
+                        <div class="form-group">
+                            <label for="height">3.5. Height:</label>
+                            <input type="text" id="height" name="height">
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">3.6. Weight:</label>
+                            <input type="text" id="weight" name="weight">
+                        </div>
+                        <div class="form-group">
+                            <label for="blood-type">3.7. Blood Type:</label>
+                            <input type="text" id="blood-type" name="blood-type">
+                        </div>
+                        <div class="form-group">
+                            <label for="sss">3.8. SSS No.:</label>
+                            <input type="text" id="sss" name="sss">
+                        </div>
+                        <div class="form-group">
+                            <label for="gsis">3.9. GSIS No.:</label>
+                            <input type="text" id="gsis" name="gsis">
+                        </div>
+                        <div class="form-group">
+                            <label for="tin">3.10. TIN No.:</label>
+                            <input type="text" id="tin" name="tin">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="distinguishing-marks">3.11. Distinguishing Marks:</label>
+                        <input type="text" id="distinguishing-marks" name="distinguishing-marks">
+                    </div>
+                </div>
+            
+                <div class="form-section">
+                    <h2>4. Educational Background</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>School</th>
+                                <th>Educational Level</th>
+                                <th>School Year - Graduated</th>
+                                <th>Degree</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" name="school[]"></td>
+                                <td><input type="text" name="educational-level[]"></td>
+                                <td><input type="text" name="school-year[]"></td>
+                                <td><input type="text" name="degree[]"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" name="school[]"></td>
+                                <td><input type="text" name="educational-level[]"></td>
+                                <td><input type="text" name="school-year[]"></td>
+                                <td><input type="text" name="degree[]"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            
+                <div class="form-section">
+                    <h2>5. Course Title (for TPIS, CACs)</h2>
+                    <div class="grid">
+                        <div class="form-group">
+                            <label for="course-title">5.1. Course Title:</label>
+                            <input type="text" id="course-title" name="course-title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="training-duration">Training Duration (No. of Hrs.):</label>
+                            <input type="number" id="training-duration" name="training-duration" required>
+                        </div>
+                    </div>
+                    <div class="grid">
+                        <div class="form-group">
+                            <label for="schedule-from">From:</label>
+                            <input type="date" id="schedule-from" name="schedule-from" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="schedule-to">To:</label>
+                            <input type="date" id="schedule-to" name="schedule-to" required>
+                        </div>
+                    </div>
+                    <div class="grid">
+                        <div class="form-group">
+                            <label for="aptitude-exam-date">5.3. Aptitude Exam Schedule Date:</label>
+                            <input type="date" id="aptitude-exam-date" name="aptitude-exam-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="aptitude-exam-time">Time:</label>
+                            <input type="time" id="aptitude-exam-time" name="aptitude-exam-time" required>
+                        </div>
+                    </div>
+                </div>
+            
+                <button type="button" class="btn" onclick="showPage(2)">Next</button>
+            </div>
+            
+            <div id="page2" class="form-container" style="display: none;">
+                <div class="form-section">
+                    <h2>6. Competency Assessment to Take</h2>
+                    <div class="grid">
+                        <div class="form-group">
+                            <label for="application-date">6.1. Date of Application:</label>
+                            <input type="date" id="application-date" name="application-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sector-component">6.2. Sector Component:</label>
+                            <input type="text" id="sector-component" name="sector-component" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="trade-area">6.3. Trade Area:</label>
+                            <input type="text" id="trade-area" name="trade-area" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="occupation">6.4. Occupation:</label>
+                            <input type="text" id="occupation" name="occupation" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="classification">6.5. Classification:</label>
+                            <input type="text" id="classification" name="classification" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="competency">6.6. Competency:</label>
+                            <input type="text" id="competency" name="competency" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="training-program">6.7. Training Program:</label>
+                            <select id="training-program" name="training-program" required>
+                                <option value="">Select</option>
+                                <option value="formal">Formal</option>
+                                <option value="non-formal">Non-Formal</option>
+                                <option value="informal">Informal (prior learning)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="program-sector">6.8. Program Sector:</label>
+                            <select id="program-sector" name="program-sector" required>
+                                <option value="">Select</option>
+                                <option value="public">Public</option>
+                                <option value="industry">Industry</option>
+                                <option value="ofw">OFW</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="client-type">6.9. Client Type:</label>
+                            <select id="client-type" name="client-type" required>
+                                <option value="">Select</option>
+                                <option value="tesda-grad">TESDA Grad.</option>
+                                <option value="pwd">Person with Disability</option>
+                                <option value="scep">SCEP</option>
+                                <option value="non-tesda-grad">Non-TESDA Grad.</option>
+                                <option value="ofw">OFW</option>
+                                <option value="farmers-fisherfolks">Farmers; Fisherfolks</option>
+                                <option value="osy">OSY</option>
+                                <option value="other">Others</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="form-section">
+                    
+                    <h2>7. Working Experience*</h2>
+                    <button type="button" class="btn" onclick="addExperience()">Add Experience</button>
+                    <table id="experience-table">
+                        <div class="grid">
+                            <div class="form-group">
+                                <label for="years_of_experience">Total Years of Work Experience:*</label>
+                                <input type="number" id="years_of_experience" name="years_of_experience" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="training_hours">Total Training Hours:*</label>
+                                <input type="number" id="training_hours" name="training_hours" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="training_institution">(CURRENT) Training Institution:*</label>
+                                <input type="text" id="training_institution" name="training_institution" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="type_training_institution">Type of Training Institution:*</label>
+                                <select id="type_training_institution" name="type_training_institution" required>
+                                    <option value="">Select</option>
+                                    <option value="private">Private</option>
+                                    <option value="public">Public</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="educational_attainment">Educational Attainment:*</label>
+                                <select id="educational_attainment" name="educational_attainment" required>
+                                    <option value="">Select</option>
+                                    <option value="high-school">High School</option>
+                                    <option value="college">College</option>
+                                    <option value="vocational">Vocational</option>
+                                    <option value="post-graduate">Post-Graduate</option>
+                                </select>
+                            </div>
+                        </div>
+                        <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Position</th>
+                                <th>Dates</th>
+                                <th>Salary</th>
+                                <th>Years of Experience</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" name="company[]"></td>
+                                <td><input type="text" name="position[]"></td>
+                                <td><input type="text" name="dates[]"></td>
+                                <td><input type="number" name="salary[]"></td>
+                                <td><input type="number" name="years-of-experience[]"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" name="company[]"></td>
+                                <td><input type="text" name="position[]"></td>
+                                <td><input type="text" name="dates[]"></td>
+                                <td><input type="number" name="salary[]"></td>
+                                <td><input type="number" name="years-of-experience[]"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" name="company[]"></td>
+                                <td><input type="text" name="position[]"></td>
+                                <td><input type="text" name="dates[]"></td>
+                                <td><input type="number" name="salary[]"></td>
+                                <td><input type="number" name="years-of-experience[]"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <script>
+                        function addExperience() {
+                            const tableBody = document.querySelector('#experience-table tbody');
+                            const newRow = document.createElement('tr');
+                            newRow.innerHTML = `
+                                <td><input type="text" name="company[]"></td>
+                                <td><input type="text" name="position[]"></td>
+                                <td><input type="text" name="dates[]"></td>
+                                <td><input type="number" name="salary[]"></td>
+                                <td><input type="number" name="years-of-experience[]"></td>
+                            `;
+                            tableBody.appendChild(newRow);
+                        }
+                    </script>
+                </div>
+            
+                <div class="form-section">
+                    <h2>8. Other Training/Seminars Attended</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Venue</th>
+                                <th>Dates</th>
+                                <th>Hours</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" name="training-title[]"></td>
+                                <td><input type="text" name="training-venue[]"></td>
+                                <td><input type="text" name="training-dates[]"></td>
+                                <td><input type="number" name="training-hours[]"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" name="training-title[]"></td>
+                                <td><input type="text" name="training-venue[]"></td>
+                                <td><input type="text" name="training-dates[]"></td>
+                                <td><input type="number" name="training-hours[]"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            
+                <div class="form-section">
+                    <h2>9. Licenses/Examinations Passed</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Year</th>
+                                <th>Rating</th>
+                                <th>Expiry</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" name="license-title[]"></td>
+                                <td><input type="number" name="license-year[]"></td>
+                                <td><input type="text" name="license-rating[]"></td>
+                                <td><input type="date" name="license-expiry[]"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" name="license-title[]"></td>
+                                <td><input type="number" name="license-year[]"></td>
+                                <td><input type="text" name="license-rating[]"></td>
+                                <td><input type="date" name="license-expiry[]"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            
+                <div class="form-section">
+                    <h2>10. Competency Assessment Passed</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sector</th>
+                                <th>Trade Area</th>
+                                <th>Occupation</th>
+                                <th>Classification Level</th>
+                                <th>Competency</th>
+                                <th>Specialization Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" name="competency-sector[]"></td>
+                                <td><input type="text" name="competency-trade[]"></td>
+                                <td><input type="text" name="competency-occupation[]"></td>
+                                <td><input type="text" name="classification-level[]"></td>
+                                <td><input type="text" name="competency[]"></td>
+                                <td><input type="text" name="specialization-description[]"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" name="competency-sector[]"></td>
+                                <td><input type="text" name="competency-trade[]"></td>
+                                <td><input type="text" name="competency-occupation[]"></td>
+                                <td><input type="text" name="classification-level[]"></td>
+                                <td><input type="text" name="competency[]"></td>
+                                <td><input type="text" name="specialization-description[]"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            
+                <div class="form-section family-background">
+                    <h2>11. Family Background</h2>
+                    <div class="grid">
+                        <div class="form-group">
+                            <label for="spouse-name">11.1. Spouse's Name:</label>
+                            <input type="text" id="spouse-name" name="spouse-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="spouse-education">11.2. Educational Attainment:</label>
+                            <input type="text" id="spouse-education" name="spouse-education">
+                        </div>
+                        <div class="form-group">
+                            <label for="spouse-occupation">11.3. Occupation:</label>
+                            <input type="text" id="spouse-occupation" name="spouse-occupation">
+                        </div>
+                        <div class="form-group">
+                            <label for="spouse-income">11.4. Ave. Monthly Income:</label>
+                            <input type="text" id="spouse-income" name="spouse-income">
+                        </div>
+                        <div class="form-group">
+                            <label for="father-name">11.5. Father's Name:</label>
+                            <input type="text" id="father-name" name="father-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="father-education">11.6. Educational Attainment:</label>
+                            <input type="text" id="father-education" name="father-education">
+                        </div>
+                        <div class="form-group">
+                            <label for="father-occupation">11.7. Occupation:</label>
+                            <input type="text" id="father-occupation" name="father-occupation">
+                        </div>
+                        <div class="form-group">
+                            <label for="father-income">11.8. Ave. Monthly Income:</label>
+                            <input type="text" id="father-income" name="father-income">
+                        </div>
+                        <div class="form-group">
+                            <label for="mother-name">11.9. Mother's Name:</label>
+                            <input type="text" id="mother-name" name="mother-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="mother-education">11.10. Educational Attainment:</label>
+                            <input type="text" id="mother-education" name="mother-education">
+                        </div>
+                        <div class="form-group">
+                            <label for="mother-occupation">11.11. Occupation:</label>
+                            <input type="text" id="mother-occupation" name="mother-occupation">
+                        </div>
+                        <div class="form-group">
+                            <label for="mother-income">11.12. Ave. Monthly Income:</label>
+                            <input type="text" id="mother-income" name="mother-income">
+                        </div>
+                        <div class="form-group">
+                            <label for="guardian-name">11.13. Name of Guardian:</label>
+                            <input type="text" id="guardian-name" name="guardian-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="guardian-education">11.14. Educational Attainment:</label>
+                            <input type="text" id="guardian-education" name="guardian-education">
+                        </div>
+                        <div class="form-group">
+                            <label for="guardian-occupation">11.15. Occupation:</label>
+                            <input type="text" id="guardian-occupation" name="guardian-occupation">
+                        </div>
+                        <div class="form-group">
+                            <label for="guardian-income">11.16. Ave. Monthly Income:</label>
+                            <input type="text" id="guardian-income" name="guardian-income">
+                        </div>
+                        <div class="form-group">
+                            <label for="dependents">11.17. Dependents:</label>
+                            <input type="text" id="dependents" name="dependents">
+                        </div>
+                        <div class="form-group">
+                            <label for="dependent-age">11.18. Age Dependent:</label>
+                            <input type="text" id="dependent-age" name="dependent-age">
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="form-section">
+                    <h2>12. NTTC Application Form*</h2>
+                    <div class="form-row grid">
+                        <div class="form-group">
+                            <label for="sector">Sector*</label>
+                            <select id="sector" name="sector" required>
+                                <option value="">Select sector</option>
+                                <option value="agriculture">Agriculture, Forestry, and Fishery</option>
+                                <option value="automotive">Automotive and Land Transportation</option>
+                                <option value="construction">Construction</option>
+                                <option value="electrical_and_electronics">Electrical and Electronics</option>
+                                <option value="furniture">Furniture and Fixtures</option>
+                                <option value="garments">Garments and Textiles</option>
+                                <option value="heating_ventilation_airconditioning_and_refrigeration">Heating, Ventilation, Airconditioning and Refrigeration</option>
+                                <option value="health">Human Health / Health Care</option>
+                                <option value="information_and_communication_technology">Information and Communication Technology</option>
+                                <option value="maritime">Maritime</option>
+                                <option value="metals_and_engineering">Metals and Engineering</option>
+                                <option value="processed_food_and_beverages">Processed Food & Beverages</option>
+                                <option value="social_community_development_and_other_services">Social, Community Development and Other Services</option>
+                                <option value="tourism">Tourism (Hotel and Restaurant)</option>
+                                <option value="utilities">Utilities</option>
+                                <option value="visual_arts">Visual Arts</option>
+                                <option value="wholesale_and_retail_trading">Wholesale and Retail Trading</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="qualification">Qualification*</label>
+                            <select id="qualification" name="qualification" required>
+                                <option value="">Select qualification</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nttcstatus">Status*</label>
+                        <select id="nttcstatus" name="nttcstatus">
+                            <option value="new">NEW</option>
+                            <option value="renewal">RENEWAL</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nc_cert_number">NC Certificate Number*</label>
+                        <input type="number" id="nc_cert_number" name="nc_cert_number" placeholder="Enter NC certificate number" required maxlength="14" min="0" oninput="this.value = this.value.slice(0, 14)">
+                        <small style="color: red;">Please enter all 14 digits.</small>
+                    </div>
+                    
+                    <div class="form-row grid">
+                        <div class="form-group">
+                            <label for="nc_date_issuance">NC Date of Issuance*</label>
+                            <input type="date" id="nc_date_issuance" name="nc_date_issuance" required onchange="setNCValidity()">
+                        </div>
+                        <div class="form-group">
+                            <label for="nc_validity">NC Validity</label>
+                            <input type="date" id="nc_validity" name="nc_validity" required readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tm_cert_number">TM Certificate Number*</label>
+                        <div style="display: flex; align-items: center;">
+                            <input type="text" value="TMC-" readonly style="width: 60px; margin-right: 5px;">
+                            <input type="text" id="tm_cert_number" name="tm_cert_number" placeholder="Enter 14 digits" required pattern="^\d{14}$" title="Enter 14 digits only" maxlength="14" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row grid">
+                        <div class="form-group">
+                            <label for="tm_date_issuance">TM Date of Issuance*</label>
+                            <input type="date" id="tm_date_issuance" name="tm_date_issuance" required onchange="setTMValidity()">
+                        </div>
+                        <div class="form-group">
+                            <label for="tm_validity">TM Validity</label>
+                            <input type="date" id="tm_validity" name="tm_validity" required readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="assessor1">Assessor 1*</label>
+                        <input type="text" id="assessor1" name="assessor1" placeholder="Enter assessor 1 name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="assessor2">Assessor 2*</label>
+                        <input type="text" id="assessor2" name="assessor2" placeholder="Enter assessor 2 name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="assessor3">Assessor 3*</label>
+                        <input type="text" id="assessor3" name="assessor3" placeholder="Enter assessor 3 name">
+                    </div>
+                    <button type="button" class="btn" onclick="showPage(1)">Back</button>
+                    <button type="button" class="btn" onclick="handleSubmit()">Submit</button>
+                </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div id="warningModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Missing Fields</h2>
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageNumber) {
+            const pages = document.querySelectorAll('.form-container');
+            pages.forEach((page, index) => {
+                page.style.display = (index + 1 === pageNumber) ? 'block' : 'none';
+            });
+        }
+
+        function handleSubmit() {
+            const form = document.getElementById('tesdaForm');
+            const requiredFields = [
+                'last_name', 'first_name', 'middle_initial', 'email',
+                'birthdate', 'sex', 'address', 'training_institution', 
+                'type_training_institution', 'contact', 'educational_attainment', 
+                'training_hours', 'years_of_experience', 'sector', 
+                'qualification', 'nc_cert_number', 'nc_date_issuance', 
+                'tm_cert_number', 'tm_date_issuance', 'assessor1',
+                'assessor2', 
+                'assessor3', 
+                'nttc_serial_number', 
+                'nttc_cert_number', 
+                'nttc_date_issuance', 
+                'nttc_validity',
+                'nttcstatus'
+            ];
+            
+            let missingFields = [];
+            
+            requiredFields.forEach(field => {
+                const input = form.querySelector(`[name="${field}"]`);
+                if (input && !input.value) {
+                    missingFields.push(field);
+                }
+            });
+
+            if (missingFields.length > 0) {
+                // Highlight missing fields
+                missingFields.forEach(field => {
+                    const input = form.querySelector(`[name="${field}"]`);
+                    if (input) {
+                        input.classList.add('missing-field'); // Add class to highlight
+                        input.addEventListener('input', () => {
+                            input.classList.remove('missing-field'); // Remove class when user fills the field
+                        });
+                    }
+                });
+                
+                document.getElementById('modalMessage').innerText = `Please fill in the following fields: ${missingFields.join(', ')}`;
+                document.getElementById('warningModal').style.display = 'block'; // Show modal
+                return; // Prevent submission if there are missing fields
+            }
+
+            const tmCertNumberInput = form.querySelector('[name="tm_cert_number"]');
+            if (tmCertNumberInput) {
+                const tmCertNumberWithPrefix = '' + tmCertNumberInput.value.padStart(14, '0'); // Ensure it is 14 digits
+                tmCertNumberInput.value = tmCertNumberWithPrefix; // Update the input value
+            }
+
+            const formData = new URLSearchParams(new FormData(form)).toString();
+            window.location.href = 'preview.html?' + formData; // Redirect to preview.html with form data
+        }
+
+        function closeModal() {
+            document.getElementById('warningModal').style.display = 'none'; // Hide modal
+        }
+
+        const sectorSelect = document.getElementById('sector');
+        const qualificationSelect = document.getElementById('qualification');
+
+        const qualifications = {
+            agriculture: [
+                "Agricultural Crops Production NC II",
+                "Agricultural Crops Production NC III",
+                "Agroentrepreneurship NC II",
+                "Agroentrepreneurship NC III",
+                "Agroentrepreneurship NC IV",
+                "Animal Health Care and Management NC III",
+                "Animal Production (Poultry-Chicken) NC II",
+                "Animal Production (Ruminants) NC II",
+                "Animal Production (Swine) NC II",
+                "Aquaculture NC II",
+                "Artificial Insemination (Large Ruminants)",
+                "Artificial Insemination (Swine) NC II",
+                "Bamboo Production NC II",
+                "Drying and Milling Plant Servicing NC III",
+                "Fish Capture NC II",
+                "Fishing Gear Repair and Maintenance NC III",
+                "Grains Production NC II",
+                "Horticulture NC III",
+                "Landscape Installation and Maintenance",
+                "Milking Operation NC II",
+                "Organic Agriculture Production NC II",
+                "Pest Management (Vegetables) NC II",
+                "Rice Machinery Operations NC II",
+                "Rubber Processing NC II",
+                "Rubber Production NC II",
+                "Seaweed Production NC II",
+                "Coffee Production Level II",
+                "Mango Production Level II"
+            ],
+            automotive: [
+                "Automotive Body Painting/Finishing NC III",
+                "Automotive Body Repairing NC II",
+                "Automotive Electrical Assembly NC II",
+                "Automotive Electrical Assembly NC III",
+                "Automotive Mechanical Assembly NC II",
+                "Automotive Mechanical Assembly NC III",
+                "Automotive Servicing NC II",
+                "Automotive Servicing NC III",
+                "Automotive Servicing NC IV",
+                "Automotive Wiring Harness Assembly NC II",
+                "Driving (Articulated Vehicle) NC III",
+                "Driving (Passenger Bus/Straight Truck) NC III",
+                "Driving NC II",
+                "Painting Machine Operation NC II",
+                "Plastic Machine Operation NC II",
+                "Tinsmithing (Automotive Manufacturing) NC III",
+                "Automotive Painting NC II",
+                "Automotive Servicing (Chassis Repair) NC II",
+                "Automotive Servicing (Electrical Repair) NC II"
+            ],
+            construction: [
+                "Carpentry NC II",
+                "Carpentry NC III",
+                "Construction Painting NC II",
+                "Construction Painting NC III",
+                "Heavy Equipment Operation (Articulated Off-Heavy Equipment Operation (Backhoe Loader) NC II",
+                "Heavy Equipment Operation (Bulldozer) NC II",
+                "Heavy Equipment Operation (Concrete Pump) NC",
+                "Heavy Equipment Operation (Container Stacker) NC II",
+                "Heavy Equipment Operation (Gantry Crane) NC II",
+                "Heavy Equipment Operation (Hydraulic) NC II",
+                "Heavy Equipment Operation (Motor Grader) NC II",
+                "Heavy Equipment Operation (Paver) NC II",
+                "Heavy Equipment Operation (Rigid Off-Highway Dump) NC II",
+                "Heavy Equipment Operation (Rigid On-Highway Dump) NC II",
+                "Heavy Equipment Servicing (Mechanical) NC II",
+                "Masonry NC II",
+                "Masonry NC III",
+                "Pipfitting (Metallic) NC II",
+                "Pipfitting NC II",
+    
+                "Plumbing NC II",
+                "PV System Design NC III",
+                "PV Systems Installation NC II",
+                "PV Systems Servicing NC III",
+                "Rigging NC I",
+                "Scaffold Erection NC II",
+                "Scaffolding Works NC II (Supported Type Scaffold)",
+                "Technical Drafting NC II",
+                "Tile Setting NC II",
+                "Construction Site Supervision Level IV"
+            ],
+            electrical_and_electronics: [
+                "Computer Systems Servicing NC II",
+                "Consumer Electronics Servicing NC III",
+                "Consumer Electronics Servicing NC IV",
+                "Electrical Installation and Maintenance NC II",
+                "Electrical Installation and Maintenance NC III",
+                "Electrical Installation and Maintenance NC IV",
+                "Electronic Products Assembly and Servicing NC II",
+                "Instrumentation and Control Servicing NC II",
+                "Instrumentation and Control Servicing NC III",
+                "Instrumentation and Control Servicing NC IV",
+                "Mechatronics Servicing NC II",
+                "Mechatronics Servicing NC III",
+                "Semiconductor Back-End Operation NC II",
+                "Semiconductor Front-of-Line Operation NC II",
+                "Production Line - Back End Operation Electronics",
+                "Production Line - SMT Operation Level"
+            ],
+            furniture: [
+                "Furniture Making (Finishing) NC II"
+            ],
+            garments: [
+                "Dressmaking NC II",
+                "Fashion Design (Apparel) NC III",
+                "Tailoring NC II",
+                "Industrial Sewing Machine Operation"
+            ],
+            heating_ventilation_airconditioning_and_refrigeration: [
+                "Air Duct Servicing NC II",
+                "Ice Plant Refrigeration Servicing NC III",
+                "RAC Servicing (DOMRAC) NC II",
+                "RAC Servicing (PACU-CR) NC III",
+                "Transport RAC Servicing NC II"
+            ],
+            health: [
+                "Barangay Health Services NC II",
+                "Biomedical Equipment Services NC II",
+                "Caregiving (Clients with Special Needs) NC II",
+                "Caregiving (Elderly) NC II",
+                "Caregiving (Grade Schooler to Adolescent) NC II",
+                "Caregiving (Newborn to Preschooler) NC II",
+                "Caregiving NC II",
+                "Dental Hygiene Level IV",
+                "Dental Laboratory Technology Services (Fixed Dental Laboratory Technology)",
+                "Dental Technology NC IV",
+                "Emergency Medical Services NC II",
+                "Health Care Services NC II",
+                "Hilot (Wellness Massage) NC II",
+                "Massage Therapy NC II",
+                "Ophthalmic Lens Services NC II",
+                "Pharmacy Services NC III",
+                "Barangay Infectious Disease Management",
+                "Contact Tracing Level II"
+            ],
+            information_and_communication_technology: [
+                "2D Animation NC III",
+                "2D Game Art Development NC III",
+                "3D Animation NC III",
+                "3D Game Art Development NC III",
+                "Animation NC II",
+                "Broadband Installation (Fixed Wireless Systems)",
+                "Cable TV Installation NC II",
+                "Cable TV Operation and Maintenance NC III",
+                "Contact Center Services NC II",
+                "Game Programming NC III",
+                "Medical Transcription NC II",
+                "Programming (.NET Technology) NC III",
+                "Programming (Java) NC II",
+                "Programming (Java) NC III",
+                "Programming (Oracle Database) NC III",
+                "Telecom OSP and Subscriber Line Installation",
+                "Telecom OSP Installation (Fiber Optic Cable) NC II",
+                "Visual Graphic Design NC II",
+                "Visual Graphic Design NC III",
+                "Web Development NC III",
+                "Computer Security Incident Handling Level I",
+                "Creative Web Design",
+                "Web Development"
+            ],
+            maritime: [
+                "Ship's Catering Services NC I",
+                "Ships' Catering NC III (Ships' Cooks)"
+            ],
+            metals_and_engineering: [
+                "CAD/CAM Operation NC III",
+                "CNC Lathe Machine Operation NC II",
+                "CNC Lathe Machine Operation NC III",
+                "CNC Milling Machine Operation NC II",
+                "CNC Milling Machine Operation NC III",
+                "Flux-Cored Arc Welding (FCAW) NC II",
+                "Flux-Cored Arc Welding (FCAW) NC III",
+                "Gas Metal Arc Welding (GMAW) NC II",
+                "Gas Metal Arc Welding (GMAW) NC III",
+                "Gas Tungsten Arc Welding (GTAW) NC II",
+                "Gas Tungsten Arc Welding (GTAW) NC IV",
+                "Gas Welding NC II",
+                "Machining NC II",
+                "Machining NC III",
+                "Shielded Metal Arc Welding (SMAW) NC II",
+                "Shielded Metal Arc Welding (SMAW) NC III",
+                "Shielded Metal Arc Welding (SMAW) NC IV",
+                "Submerged Arc Welding (SAW) NC II",
+                "Tool and Die Making NC II"
+            ],
+            processed_food_and_beverages: [
+                "Fish Products Packaging NC II",
+                "Food Processing NC II",
+                "Food Processing NC III",
+                "Food Processing NC IV",
+                "Slaughtering Operations (Large Animal) NC II",
+                "Slaughtering Operations (Swine) NC II"
+            ],
+            social_community_development_and_other_services: [
+                "Barbering NC II",
+                "Beauty Care (Nail Care) Services NC II",
+                "Beauty Care (Skin Care) Services NC II",
+                "Beauty Care NC II",
+                "Beauty Care Services (Nail Care) NC II",
+                "Bookkeeping NC III",
+                "Domestic Work NC II - Without Electives",
+                "Domestic Work NC II",
+                "Hairdressing NC II",
+                "Hairdressing NC III",
+                "Lifeguard Services NC II",
+                "Lifeguard Services NC III",
+                "Microfinance Technology NC II",
+                "Real Estate Services NC II",
+                "Security Services NC II",
+                "Cooperative Development and Management Level I"
+            ],
+            tourism: [
+                "Barista NC II",
+                "Bartending NC II",
+                "Bread and Pastry Production NC II",
+                "Commercial Cooking NC II",
+                "Commercial Cooking NC IV",
+                "Cookery NC II",
+                "Events Management Services NC III",
+                "Food and Beverage Services NC II",
+                "Food and Beverage Services NC III",
+                "Food and Beverage Services NC IV",
+                "Front Office Services NC II",
+                "Housekeeping NC II",
+                "Housekeeping NC III",
+                "Housekeeping NC IV",
+                "Local Guiding Services NC II",
+                "Tourism Promotion Services NC II",
+                "Travel Services NC II"
+            ],
+            utilities: [
+                "Line Construction (Electric Power Distribution) NC II",
+                "Transmission Line Installation and Maintenance NC II",
+                "Transmission Line Installation and Maintenance NC III"
+            ],
+            visual_arts: [
+                "Illustration NC II",
+                "Photography NC II"
+            ],
+            wholesale_and_retail_trading: [
+                "Customer Services NC II"
+            ],
+        };
+
+        sectorSelect.addEventListener('change', function() {
+            const selectedSector = this.value;
+            qualificationSelect.innerHTML = '<option value="">Select qualification</option>'; // Reset qualifications
+
+            if (qualifications[selectedSector]) {
+                qualifications[selectedSector].forEach(function(qualification) {
+                    const option = document.createElement('option');
+                    option.value = qualification;
+                    option.textContent = qualification;
+                    qualificationSelect.appendChild(option);
+                });
+            }
+        });
+
+        function setNCValidity() {
+            const issuanceDate = document.getElementById('nc_date_issuance').value;
+            const validityInput = document.getElementById('nc_validity');
+
+            if (issuanceDate) {
+                const date = new Date(issuanceDate);
+                date.setFullYear(date.getFullYear() + 5); // Add 5 years
+                date.setDate(date.getDate() - 1); // Subtract 1 day
+                validityInput.value = date.toISOString().split('T')[0]; // Set the value in YYYY-MM-DD format
+            } else {
+                validityInput.value = ''; // Clear the validity if issuance date is not set
+            }
+        }
+
+        function setTMValidity() {
+            const issuanceDate = document.getElementById('tm_date_issuance').value;
+            const validityInput = document.getElementById('tm_validity');
+
+            if (issuanceDate) {
+                const date = new Date(issuanceDate);
+                date.setFullYear(date.getFullYear() + 5); // Add 5 years
+                date.setDate(date.getDate() - 1); // Subtract 1 day
+                validityInput.value = date.toISOString().split('T')[0]; // Set the value in YYYY-MM-DD format
+            } else {
+                validityInput.value = ''; // Clear the validity if issuance date is not set
+            }
+        }
+
+        // Function to fetch and display content from trainer_profile.html
+        async function fetchTrainerProfile() {
+            const response = await fetch('trainer_profile.html');
+            const text = await response.text();
+            const previewContainer = document.getElementById('preview');
+            previewContainer.innerHTML = text; // Display the fetched content
+        }
+
+        // Call the fetch function on page load
+        fetchTrainerProfile();
+
+        // Assuming you have a function to handle URL parameters
+        const params = new URLSearchParams(window.location.search);
+        document.getElementById('nttcstatus').value = params.get('nttcstatus') === 'new' ? 'NEW' : 
+                                                params.get('nttcstatus') === 'renewal' ? 'RENEW' : 
+                                                'NEW'; // Default to NEW if no value or invalid value
+    </script>
+</body>
+</html>

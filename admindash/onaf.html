@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../icons/nttcmis.png">
+    <title>ONAF Database</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #000428, #004e92);
+            --card-gradient: linear-gradient(to right, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            --text-color: #ffffff;
+            --accent-color: #00a8ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: var(--primary-gradient);
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 2000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            background: rgba(255,255,255,0.1);
+            padding: 8px;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .header-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-title h1 {
+            font-size: 1.8rem;
+            margin: 0;
+            color: var(--accent-color);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .header-title span {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+            margin-top: 4px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+        }
+
+        .header-btn {
+            padding: 0.7rem 1.2rem;
+            border-radius: 6px;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-btn:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-1px);
+        }
+
+        .header-btn i {
+            font-size: 1.1rem;
+        }
+
+        .header-btn.logout {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff6b6b;
+        }
+
+        .header-btn.logout:hover {
+            background: rgba(255, 0, 0, 0.3);
+        }
+
+        .search-section {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 0 0 10px 10px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 3rem;
+            align-items: left;
+        }
+
+        .search-container {
+            max-width: 1200px;
+            margin: 0;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: flex-start;
+            padding-left: 1rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .filter-btn.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .logout-btn {
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255, 0, 0, 0.2);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        input[type="search"] {
+            max-width: 400px;
+            padding: 1rem 1.5rem;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            background: rgba(255,255,255,0.05);
+            color: white;
+            width: 100%;
+            font-size: 1rem;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        input[type="search"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: rgba(255,255,255,0.1);
+        }
+
+        input[type="search"]::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .application-card {
+            background: var(--card-gradient);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .application-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .ticket-number {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 0.5rem;
+        }
+
+        .info-group {
+            margin-bottom: 1rem;
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 0.3rem;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            color: white;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .timestamp {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+            margin-top: 0.5rem;
+            text-align: right;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .status-completed {
+            background: rgba(24, 226, 72, 0.678);
+            color: #f0f8f2fd;
+        }
+
+        .status-rejected {
+            background: rgba(220, 53, 70, 0.384);
+            color: #dc3545;
+        }
+
+        .status-spam {
+            background: rgba(243, 0, 0, 0.644);
+            color: #ffffff;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.1);
+            border-top: 5px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .receive-btn {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            border: 1px solid #28a745;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .receive-btn:hover {
+            background: #28a745;
+            color: white;
+        }
+
+        .receive-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .view-btn {
+            background: rgba(0, 168, 255, 0.2);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            flex: 1;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .receive-btn {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .header-left {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .header-title h1 {
+                font-size: 1.5rem;
+            }
+
+            .header-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .header-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .search-section {
+                padding: 1rem;
+            }
+
+            .search-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 0;
+            }
+
+            .filter-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+
+            .filter-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            input[type="search"] {
+                padding: 0.8rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .applications-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .application-card {
+                padding: 1.2rem;
+            }
+
+            .info-group {
+                margin-bottom: 0.8rem;
+            }
+
+            .info-label {
+                font-size: 0.8rem;
+            }
+
+            .info-value {
+                font-size: 0.9rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .view-btn, .receive-btn {
+                width: 100%;
+                padding: 0.8rem;
+            }
+
+            .pagination {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .pagination-btn, .page-number {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .page-numbers {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .completion-modal-content {
+                width: 90%;
+                max-width: 300px;
+                padding: 1.5rem;
+            }
+
+            .completion-modal h2 {
+                font-size: 1.5rem;
+            }
+
+            .completion-modal p {
+                font-size: 1rem;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .modal-btn {
+                width: 100%;
+                padding: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .filter-buttons {
+                gap: 0.3rem;
+            }
+
+            .filter-btn {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            .application-card {
+                padding: 1rem;
+            }
+
+            .ticket-number {
+                font-size: 1rem;
+            }
+
+            .status-badge {
+                font-size: 0.8rem;
+                padding: 0.2rem 0.8rem;
+            }
+
+            .timestamp {
+                font-size: 0.7rem;
+            }
+        }
+
+        .completion-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .completion-modal.show {
+            opacity: 1;
+        }
+
+        .completion-modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: linear-gradient(135deg, #000428, #004e92);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            min-width: 300px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .completion-modal.show .completion-modal-content {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .completion-modal h2 {
+            color: var(--accent-color);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .completion-modal p {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn-confirm {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .modal-btn-confirm:hover {
+            background: #0088cc;
+            transform: translateY(-2px);
+        }
+
+        .modal-btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .completion-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Add pagination styles */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding: 1rem;
+        }
+
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pagination-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-numbers {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .page-number {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .page-number.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .page-number:hover:not(.active) {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .notification-badge {
+            display: inline-block;
+            background-color: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            margin-left: 5px;
+            min-width: 18px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <img src="../icons/tlogo.png" alt="Company Logo" class="logo">
+                <div class="header-title">
+                    <h1>ONAF Database</h1>
+                    <span>National TVET Trainers Certification</span>
+                </div>
+            </div>
+            <div class="header-buttons">
+                <a href="#" class="header-btn">
+                    <i>📊</i>
+                    Dashboard
+                </a>
+                <a href="#" class="header-btn">
+                    <i>📈</i>
+                    Reports
+                </a>
+                <a href="#" class="header-btn">
+                    <i>⚙️</i>
+                    Settings
+                </a>
+                <a href="index.html?logout=true" class="header-btn logout">
+                    <i>🚪</i>
+                    Logout
+                </a>
+            </div>
+        </header>
+        
+        <div class="search-section">
+            <div class="search-container">
+                <input type="search" id="searchInput" placeholder="Search by ticket number or applicant name...">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="pending">Pending <span class="notification-badge" id="pendingCount">0</span></button>              
+                    <button class="filter-btn" data-filter="completed">Completed</button>
+                    <button class="filter-btn" data-filter="spam">Spam</button>
+                    <button class="filter-btn" data-filter="all">All</button>  
+                </div>
+            </div>
+        </div>
+
+        <div id="loadingSpinner" class="loading-spinner"></div>
+        <div id="applicationsGrid" class="applications-grid"></div>
+        <div class="pagination" id="pagination">
+            <button class="pagination-btn" id="prevPage">Previous</button>
+            <div class="page-numbers" id="pageNumbers"></div>
+            <button class="pagination-btn" id="nextPage">Next</button>
+        </div>
+    </div>
+
+    <div class="completion-modal" id="completionModal">
+        <div class="completion-modal-content">
+            <div class="completion-icon">✨</div>
+            <h2>Great Job!</h2>
+            <p>Application has been marked as completed.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-confirm" id="modalConfirm">Okay</button>
+                <button class="modal-btn modal-btn-cancel" id="modalCancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global logout function
+        function logout() {
+            // Get the auth instance
+            const auth = getAuth();
+            
+            // Sign out from Firebase
+            signOut(auth)
+                .then(() => {
+                    console.log('User signed out successfully');
+                    
+                    // Clear local storage
+                    localStorage.clear();
+                    
+                    // Clear session storage
+                    sessionStorage.clear();
+                    
+                    // Clear any cookies
+                    document.cookie.split(";").forEach(function(c) { 
+                        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+                    });
+                    
+                    // Redirect to login page
+                    window.location.href = "index.html";
+                })
+                .catch((error) => {
+                    console.error('Error signing out:', error);
+                    // Even if there's an error, still try to redirect to login page
+                    window.location.href = "index.html";
+                });
+        }
+    </script>
+
+    <script type="module">
+        // Import Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAmgjzLx4mVkeWyfjwKNMtxmL9o1BesaW0",
+            authDomain: "sampleform-fd82e.firebaseapp.com",
+            projectId: "sampleform-fd82e",
+            storageBucket: "sampleform-fd82e.firebasestorage.app",
+            messagingSenderId: "129137441476",
+            appId: "1:129137441476:web:e29e8ca547b93aa1d3a791",
+            measurementId: "G-DZMYEG4NHL"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+        const applicationsRef = ref(db, 'applications');
+
+        // Check authentication state
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'index.html'; // Redirect if not authenticated
+            }
+        });
+
+        // DOM elements
+        const applicationsGrid = document.getElementById('applicationsGrid');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const searchInput = document.getElementById('searchInput');
+
+        // Add this to your JavaScript, before the onValue listener
+        let currentFilter = 'pending';
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        let lastSnapshot = null;
+
+        // Add pagination state variables
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let totalPages = 1;
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active state
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Update current filter
+                currentFilter = button.dataset.filter;
+                
+                // Re-render applications with current filter
+                if (lastSnapshot) {
+                    const data = lastSnapshot.val();
+                    if (data) {
+                        const filteredApplications = filterApplications(data, searchInput.value);
+                        renderApplications(filteredApplications);
+                    }
+                }
+            });
+        });
+
+        // Function to format timestamp
+        function formatTimestamp(timestamp) {
+            try {
+                // Handle both numeric timestamps and ISO strings
+                const date = typeof timestamp === 'string' ? new Date(timestamp) : new Date(parseInt(timestamp));
+                
+                // Check if the date is valid
+                if (isNaN(date.getTime())) {
+                    return 'Date not available';
+                }
+
+                const options = { 
+                    month: 'long', 
+                    day: 'numeric', 
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                };
+                return date.toLocaleDateString('en-US', options);
+            } catch (error) {
+                console.error('Error formatting timestamp:', error);
+                return 'Date not available';
+            }
+        }
+
+        // Function to create application card
+        function createApplicationCard(data, key) {
+            const card = document.createElement('div');
+            card.className = 'application-card';
+            
+            // Determine status - default to 'pending' if not set
+            const status = data.status || 'pending';
+            
+            // Determine if button should be shown and what text to display
+            let buttonHTML = '';
+            if (status === 'spam') {
+                buttonHTML = `<button class="receive-btn" data-key="${key}">Delete Application 🗑️</button>`;
+            } else if (status === 'pending') {
+                buttonHTML = `<button class="receive-btn" data-key="${key}">Mark as Completed ✅</button>`;
+            } else if (status === 'completed') {
+                // Change button to Delete Application for completed applications
+                buttonHTML = `<button class="receive-btn" data-key="${key}">Delete Application 🗑️</button>`;
+            }
+            
+            // Extract the actual data from the correct structure
+            const firstName = data.manpowerProfile?.firstName || 'N/A';
+            const lastName = data.manpowerProfile?.lastName || 'N/A';
+            const contact = data.manpowerProfile?.contact || 'N/A';
+            const email = data.manpowerProfile?.email || 'N/A';
+            const sector = data.nttcApplication?.sector || 'N/A';
+            const qualification = data.nttcApplication?.qualification || 'N/A';
+            
+            // Get timestamp from the application data or key
+            let timestamp = data.timestamp || data.importDate || key.split('-')[1];
+            const formattedTimestamp = formatTimestamp(timestamp);
+            
+            card.innerHTML = `
+                <div class="ticket-number">${data.ticketNumber || 'No Ticket Number'}</div>
+                <div class="info-group">
+                    <div class="info-label">Applicant Name</div>
+                    <div class="info-value">${firstName} ${lastName}</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">Contact</div>
+                    <div class="info-value">${contact}</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">${email}</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">Sector</div>
+                    <div class="info-value">${sector.toUpperCase()}</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">Qualification</div>
+                    <div class="info-value">${qualification.toUpperCase()}</div>
+                </div>
+                <div class="status-badge status-${status}">
+                    ${status.toUpperCase()}
+                </div>
+                <div class="timestamp">Received: ${formattedTimestamp}</div>
+                <div class="button-group">
+                    <button class="view-btn" data-key="${key}">View PDF Application</button>
+                    ${buttonHTML}
+                </div>
+            `;
+            
+            // Add click handler for the view button
+            const viewBtn = card.querySelector('.view-btn');
+            viewBtn.addEventListener('click', function() {
+                console.log('View button clicked for application:', key); // Debugging
+                try {
+                    // Create URL parameters
+                    const params = new URLSearchParams();
+
+                    // Helper function to safely get nested values
+                    const getValue = (obj, path, defaultValue = '') => {
+                        return path.split('.').reduce((acc, part) => (acc && acc[part] ? acc[part] : defaultValue), obj);
+                    };
+                    
+                    // Map all required fields based on preview.html's expected parameters
+                    // 1. Ticket number and basic info
+                    params.set('ticketNumber', data.ticketNumber || '');
+                    
+                    // 2. TESDA Info
+                    params.set('nmis-code', getValue(data, 'tesdaInfo.nmisCode'));
+                    params.set('nmis-date', getValue(data, 'tesdaInfo.nmisDate'));
+                    
+                    // 3. Manpower Profile
+                    params.set('last-name', getValue(data, 'manpowerProfile.lastName'));
+                    params.set('first-name', getValue(data, 'manpowerProfile.firstName'));
+                    params.set('middle-name', getValue(data, 'manpowerProfile.middleInitial'));
+                    params.set('extension', getValue(data, 'manpowerProfile.extension'));
+                    params.set('address', getValue(data, 'manpowerProfile.mailingAddress'));
+                    params.set('city', getValue(data, 'manpowerProfile.city'));
+                    params.set('province', getValue(data, 'manpowerProfile.province'));
+                    params.set('region', getValue(data, 'manpowerProfile.region'));
+                    params.set('zip-code', getValue(data, 'manpowerProfile.zipCode'));
+                    params.set('po-box', getValue(data, 'manpowerProfile.poBox'));
+                    params.set('sex', getValue(data, 'manpowerProfile.sex'));
+                    params.set('civil-status', getValue(data, 'manpowerProfile.civilStatus'));
+                    params.set('contact', getValue(data, 'manpowerProfile.contact'));
+                    params.set('telephone', getValue(data, 'manpowerProfile.telephone'));
+                    params.set('email', getValue(data, 'manpowerProfile.email'));
+                    params.set('fax', getValue(data, 'manpowerProfile.fax'));
+                    params.set('employment-type', getValue(data, 'manpowerProfile.employmentType'));
+                    params.set('employment-status', getValue(data, 'manpowerProfile.employmentStatus'));
+                    
+                    // 4. Personal Information
+                    params.set('birthdate', getValue(data, 'personalInfo.birthdate'));
+                    params.set('birthplace', getValue(data, 'personalInfo.birthplace'));
+                    params.set('citizenship', getValue(data, 'personalInfo.citizenship'));
+                    params.set('religion', getValue(data, 'personalInfo.religion'));
+                    params.set('height', getValue(data, 'personalInfo.height'));
+                    params.set('weight', getValue(data, 'personalInfo.weight'));
+                    params.set('blood-type', getValue(data, 'personalInfo.bloodType'));
+                    params.set('distinguishing-marks', getValue(data, 'personalInfo.distinguishingMarks'));
+                    
+                    // 5. Government IDs
+                    params.set('sss', getValue(data, 'personalInfo.sssNo'));
+                    params.set('gsis', getValue(data, 'personalInfo.gsisNo'));
+                    params.set('tin', getValue(data, 'personalInfo.tinNo'));
+                    
+                    // 6. Educational Background
+                    if (data.educationalBackground && data.educationalBackground.schools) {
+                        const schools = data.educationalBackground.schools;
+                        schools.forEach((school, i) => {
+                            if (!params.getAll('school[]')[i]) {
+                                params.append('school[]', school.name || '');
+                                params.append('educational-level[]', school.level || '');
+                                params.append('school-year[]', school.years || '');
+                                params.append('degree[]', school.degree || '');
+                            }
+                        });
+                    }
+                    
+                    // 7. Course Information
+                    params.set('course-title', getValue(data, 'courseInfo.courseTitle'));
+                    params.set('training-duration', getValue(data, 'courseInfo.trainingDuration'));
+                    params.set('schedule-from', getValue(data, 'courseInfo.scheduleFrom'));
+                    params.set('schedule-to', getValue(data, 'courseInfo.scheduleTo'));
+                    params.set('aptitude-exam-date', getValue(data, 'courseInfo.aptitudeExamDate'));
+                    params.set('aptitude-exam-time', getValue(data, 'courseInfo.aptitudeExamTime'));
+                    
+                    // 8. Competency Assessment
+                    params.set('application-date', getValue(data, 'applicationDate'));
+                    params.set('sector-component', getValue(data, 'competencyAssessment.sectorComponent'));
+                    params.set('trade-area', getValue(data, 'competencyAssessment.tradeArea'));
+                    params.set('occupation', getValue(data, 'competencyAssessment.occupation'));
+                    params.set('classification', getValue(data, 'competencyAssessment.classification'));
+                    params.set('competency', getValue(data, 'competencyAssessment.competency'));
+                    params.set('training-program', getValue(data, 'competencyAssessment.trainingProgram'));
+                    params.set('program-sector', getValue(data, 'competencyAssessment.programSector'));
+                    params.set('client-type', getValue(data, 'competencyAssessment.clientType'));
+                    
+                    // 9. Working Experience
+                    params.set('training_hours', getValue(data, 'workingExperience.trainingHours'));
+                    params.set('years_of_experience', getValue(data, 'workingExperience.totalYears'));
+                    params.set('training_institution', getValue(data, 'workingExperience.trainingInstitution'));
+                    params.set('type_training_institution', getValue(data, 'workingExperience.typeTrainingInstitution'));
+                    params.set('educational_attainment', getValue(data, 'workingExperience.educationalAttainment'));
+                    
+                    if (data.workingExperience && data.workingExperience.experiences) {
+                        const experiences = data.workingExperience.experiences;
+                        experiences.forEach((exp, i) => {
+                            if (!params.getAll('company[]')[i]) {
+                                params.append('company[]', exp.company || '');
+                                params.append('position[]', exp.position || '');
+                                params.append('dates[]', exp.period || '');
+                                params.append('salary[]', exp.salary || '');
+                                params.append('years-of-experience[]', exp.years || '');
+                            }
+                        });
+                    }
+                    
+                    // 10. Training Seminars
+                    if (data.trainingSeminars) {
+                        data.trainingSeminars.forEach((training, i) => {
+                            if (!params.getAll('training-title[]')[i]) {
+                                params.append('training-title[]', training.title || '');
+                                params.append('training-venue[]', training.venue || '');
+                                params.append('training-dates[]', training.date || '');
+                                params.append('training-hours[]', training.hours || '');
+                            }
+                        });
+                    }
+                    
+                    // 11. Licenses
+                    if (data.licenses) {
+                        data.licenses.forEach((license, i) => {
+                            if (!params.getAll('license-title[]')[i]) {
+                                params.append('license-title[]', license.title || '');
+                                params.append('license-year[]', license.year || '');
+                                params.append('license-rating[]', license.rating || '');
+                                params.append('license-expiry[]', license.expiry || '');
+                            }
+                        });
+                    }
+                    
+                    // 12. Competency Assessment Passed
+                    if (data.competencyAssessments) {
+                        data.competencyAssessments.forEach((comp, i) => {
+                            if (!params.getAll('competency-sector[]')[i]) {
+                                params.append('competency-sector[]', comp.sector || '');
+                                params.append('competency-trade[]', comp.trade || '');
+                                params.append('competency-occupation[]', comp.occupation || '');
+                                params.append('classification-level[]', comp.level || '');
+                                params.append('competency[]', comp.competency || '');
+                                params.append('specialization-description[]', comp.specialization || '');
+                            }
+                        });
+                    }
+                    
+                    // 13. Family Background
+                    params.set('spouse-name', getValue(data, 'familyBackground.spouse.name'));
+                    params.set('spouse-education', getValue(data, 'familyBackground.spouse.education'));
+                    params.set('spouse-occupation', getValue(data, 'familyBackground.spouse.occupation'));
+                    params.set('spouse-income', getValue(data, 'familyBackground.spouse.income'));
+                    params.set('father-name', getValue(data, 'familyBackground.father.name'));
+                    params.set('father-education', getValue(data, 'familyBackground.father.education'));
+                    params.set('father-occupation', getValue(data, 'familyBackground.father.occupation'));
+                    params.set('father-income', getValue(data, 'familyBackground.father.income'));
+                    params.set('mother-name', getValue(data, 'familyBackground.mother.name'));
+                    params.set('mother-education', getValue(data, 'familyBackground.mother.education'));
+                    params.set('mother-occupation', getValue(data, 'familyBackground.mother.occupation'));
+                    params.set('mother-income', getValue(data, 'familyBackground.mother.income'));
+                    params.set('guardian-name', getValue(data, 'familyBackground.guardian.name'));
+                    params.set('guardian-education', getValue(data, 'familyBackground.guardian.education'));
+                    params.set('guardian-occupation', getValue(data, 'familyBackground.guardian.occupation'));
+                    params.set('guardian-income', getValue(data, 'familyBackground.guardian.income'));
+                    params.set('dependents', getValue(data, 'familyBackground.dependents'));
+                    params.set('dependent-age', getValue(data, 'familyBackground.dependentAge'));
+                    
+                    if (data.familyBackground && data.familyBackground.children) {
+                        params.set('children', JSON.stringify(data.familyBackground.children));
+                    }
+                    
+                    // 14. NTTC Application Form
+                    params.set('sector', getValue(data, 'nttcApplication.sector'));
+                    params.set('qualification', getValue(data, 'nttcApplication.qualification'));
+                    params.set('nttcstatus', getValue(data, 'nttcApplication.nttcstatus', 'N/A'));
+                    params.set('nc_cert_number', getValue(data, 'nttcApplication.ncCertNumber'));
+                    params.set('nc_date_issuance', getValue(data, 'nttcApplication.ncDateIssuance'));
+                    params.set('nc_validity', getValue(data, 'nttcApplication.ncValidity'));
+                    params.set('tm_cert_number', getValue(data, 'nttcApplication.tmCertNumber'));
+                    params.set('tm_date_issuance', getValue(data, 'nttcApplication.tmDateIssuance'));
+                    params.set('tm_validity', getValue(data, 'nttcApplication.tmValidity'));
+                    params.set('assessor1', getValue(data, 'nttcApplication.assessor1'));
+                    params.set('assessor2', getValue(data, 'nttcApplication.assessor2'));
+                    params.set('assessor3', getValue(data, 'nttcApplication.assessor3'));
+
+                    // 15. Application Status
+                    params.set('application-status', getValue(data, 'status', 'pending'));
+                    
+                    console.log('Generated parameters:', params.toString()); // Debug log
+                    
+                    // Instead of redirecting in the same window, open in a new tab
+                    const url = `preview.html?${params.toString()}`;
+                    window.open(url, '_blank');
+                } catch (error) {
+                    console.error('Error in view button click handler:', error);
+                    alert('An error occurred while trying to view this application.');
+                }
+            });
+
+            // Add click handler for the receive button only if it exists
+            const receiveBtn = card.querySelector('.receive-btn:not([disabled])');
+            if (receiveBtn) {
+                receiveBtn.addEventListener('click', async (e) => {
+                    e.target.disabled = true;
+                    
+                    if (status === 'spam' || status === 'completed') {
+                        // For spam or completed entries, show confirmation and delete
+                        if (confirm('Are you sure you want to delete this application? This action cannot be undone.')) {
+                            try {
+                                e.target.textContent = 'Deleting...';
+                                const applicationRef = ref(db, `applications/${key}`);
+                                await remove(applicationRef);
+                                
+                                // Remove the card from the UI
+                                card.style.opacity = '0';
+                                card.style.transform = 'scale(0.8)';
+                                setTimeout(() => {
+                                    card.remove();
+                                    if (applicationsGrid.children.length === 0) {
+                                        applicationsGrid.innerHTML = '<div class="no-results">No applications found</div>';
+                                    }
+                                }, 300);
+                            } catch (error) {
+                                console.error('Error deleting application:', error);
+                                alert('Error deleting application. Please try again.');
+                                e.target.disabled = false;
+                                e.target.textContent = status === 'spam' ? 'Delete Application 🗑️' : 'Delete Application 🗑️';
+                            }
+                        } else {
+                            e.target.disabled = false;
+                        }
+                    } else {
+                        // For pending applications, show completion modal
+                        showCompletionModal(async (confirmed) => {
+                            if (confirmed) {
+                                try {
+                                    e.target.textContent = 'Processing...';
+                                    const applicationRef = ref(db, `applications/${key}`);
+                                    
+                                    // Update the status instead of removing the application
+                                    const updates = {};
+                                    updates[`applications/${key}/status`] = 'completed';
+                                    await update(ref(db), updates);
+
+                                    // Update the UI to reflect status change
+                                    const statusBadge = card.querySelector('.status-badge');
+                                    statusBadge.className = 'status-badge status-completed';
+                                    statusBadge.textContent = 'COMPLETED';
+                                    
+                                    // If current filter is not 'all' or 'completed', hide the card
+                                    if (currentFilter !== 'all' && currentFilter !== 'completed') {
+                                        card.style.opacity = '0';
+                                        card.style.transform = 'scale(0.8)';
+                                        setTimeout(() => {
+                                            card.remove();
+                                            if (applicationsGrid.children.length === 0) {
+                                                applicationsGrid.innerHTML = '<div class="no-results">No applications found</div>';
+                                            }
+                                        }, 300);
+                                    } else {
+                                        // Replace the button with a delete button
+                                        e.target.textContent = 'Delete Application 🗑️';
+                                        e.target.disabled = false;
+                                    }
+                                } catch (error) {
+                                    console.error('Error completing application:', error);
+                                    alert('Error completing application. Please try again.');
+                                    e.target.disabled = false;
+                                    e.target.textContent = 'Mark as Completed ✅';
+                                }
+                            } else {
+                                e.target.disabled = false;
+                                e.target.textContent = 'Mark as Completed ✅';
+                            }
+                        });
+                    }
+                });
+            }
+            
+            return card;
+        }
+
+        // Function to filter applications
+        function filterApplications(applications, searchTerm) {
+            return Object.entries(applications).filter(([key, data]) => {
+                const searchString = searchTerm.toLowerCase();
+                
+                // Get name data from the correct structure
+                const firstName = data.manpowerProfile?.firstName || '';
+                const lastName = data.manpowerProfile?.lastName || '';
+                const fullName = `${firstName} ${lastName}`.toLowerCase();
+                
+                const ticketNumber = (data.ticketNumber || '').toLowerCase();
+                const status = (data.status || 'pending').toLowerCase();
+                
+                // First check if it matches the current filter
+                if (currentFilter !== 'all') {
+                    // Make sure we're comparing the correct status
+                    if (currentFilter === 'spam' && status !== 'spam') {
+                        return false;
+                    } else if (currentFilter === 'pending' && status !== 'pending') {
+                        return false;
+                    } else if (currentFilter === 'completed' && status !== 'completed') {
+                        return false;
+                    }
+                }
+                
+                // Then check if it matches the search term
+                return fullName.includes(searchString) || ticketNumber.includes(searchString);
+            });
+        }
+
+        // Modify the isDuplicate function to be more strict
+        function isDuplicate(currentApp, otherApp) {
+            // Ensure all required fields exist before comparing
+            if (!currentApp?.manpowerProfile || !otherApp?.manpowerProfile || !currentApp?.nttcApplication || !otherApp?.nttcApplication) {
+                return false;
+            }
+
+            // Normalize strings by trimming whitespace and converting to lowercase
+            const normalize = (str) => (str || '').trim().toLowerCase();
+
+            // Check exact matches for all 5 fields
+            const isExactMatch = 
+                normalize(currentApp.manpowerProfile.firstName) === normalize(otherApp.manpowerProfile.firstName) &&
+                normalize(currentApp.manpowerProfile.lastName) === normalize(otherApp.manpowerProfile.lastName) &&
+                normalize(currentApp.manpowerProfile.contact) === normalize(otherApp.manpowerProfile.contact) &&
+                normalize(currentApp.manpowerProfile.email) === normalize(otherApp.manpowerProfile.email) &&
+                normalize(currentApp.nttcApplication.sector) === normalize(otherApp.nttcApplication.sector) &&
+                normalize(currentApp.nttcApplication.qualification) === normalize(otherApp.nttcApplication.qualification);
+
+            return isExactMatch;
+        }
+
+        // Function to update notification badges
+        function updateNotificationBadges(applications) {
+            // Count applications by status
+            const counts = {
+                pending: 0,
+                completed: 0,
+                spam: 0,
+                all: 0
+            };
+            
+            // Count applications by status
+            Object.values(applications).forEach(app => {
+                const status = app.status || 'pending';
+                counts[status]++;
+                counts.all++;
+            });
+            
+            // Update notification badges
+            document.getElementById('pendingCount').textContent = counts.pending;
+        }
+
+        // Modify the onValue listener to update notification badges
+        onValue(applicationsRef, async (snapshot) => {
+            loadingSpinner.style.display = 'none';
+            lastSnapshot = snapshot;
+            const data = snapshot.val();
+            
+            // Debug the data structure
+            console.log("Data structure from Firebase:", data);
+            
+            if (!data) {
+                applicationsGrid.innerHTML = '<div class="no-results">No applications found</div>';
+                return;
+            }
+
+            // Update notification badges
+            updateNotificationBadges(data);
+
+            // Sort applications by timestamp
+            const applications = Object.entries(data).sort(([keyA], [keyB]) => keyA.localeCompare(keyB));
+            
+            // Keep track of processed applications
+            const processedApplications = new Map();
+            const updatedData = {};
+            
+            applications.forEach(([key, app]) => {
+                // Debug each application structure
+                console.log(`Application ${key} structure:`, app);
+                
+                let isDuplicateEntry = false;
+                
+                // Compare with all previous applications
+                for (const [prevKey, prevApp] of processedApplications) {
+                    if (isDuplicate(app, prevApp)) {
+                        isDuplicateEntry = true;
+                        break;
+                    }
+                }
+
+                // Add current application to processed map if not a duplicate
+                if (!isDuplicateEntry) {
+                    processedApplications.set(key, app);
+                }
+
+                // Update the application status if it's a duplicate
+                if (isDuplicateEntry) {
+                    updatedData[key] = {
+                        ...app,
+                        status: 'spam'  // Use status directly at the top level
+                    };
+                } else {
+                    updatedData[key] = app;
+                }
+            });
+
+            // Update the lastSnapshot with the processed data
+            lastSnapshot = {
+                val: () => updatedData,
+                exists: () => true
+            };
+
+            // Initial render with processed applications
+            const filteredApplications = filterApplications(updatedData, searchInput.value);
+            renderApplications(filteredApplications);
+
+            // Search functionality
+            const searchHandler = (e) => {
+                const searchTerm = e.target.value;
+                const filtered = filterApplications(updatedData, searchTerm);
+                renderApplications(filtered);
+            };
+
+            // Remove existing listener before adding a new one
+            searchInput.removeEventListener('input', searchHandler);
+            searchInput.addEventListener('input', searchHandler);
+        }, (error) => {
+            console.error('Error fetching data:', error);
+            loadingSpinner.style.display = 'none';
+            applicationsGrid.innerHTML = '<div class="no-results">Error loading applications</div>';
+        });
+
+        // Function to update pagination controls
+        function updatePaginationControls(totalItems) {
+            totalPages = Math.ceil(totalItems / itemsPerPage);
+            const pageNumbers = document.getElementById('pageNumbers');
+            const prevBtn = document.getElementById('prevPage');
+            const nextBtn = document.getElementById('nextPage');
+
+            // Update page numbers
+            pageNumbers.innerHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `page-number ${i === currentPage ? 'active' : ''}`;
+                pageBtn.textContent = i;
+                pageBtn.addEventListener('click', () => {
+                    currentPage = i;
+                    const filteredApplications = filterApplications(lastSnapshot.val(), searchInput.value);
+                    renderApplications(filteredApplications);
+                });
+                pageNumbers.appendChild(pageBtn);
+            }
+
+            // Update button states
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages;
+        }
+
+        // Add event listeners for pagination buttons
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                const filteredApplications = filterApplications(lastSnapshot.val(), searchInput.value);
+                renderApplications(filteredApplications);
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                const filteredApplications = filterApplications(lastSnapshot.val(), searchInput.value);
+                renderApplications(filteredApplications);
+            }
+        });
+
+        // Modify the renderApplications function to handle pagination
+        function renderApplications(applications) {
+            applicationsGrid.innerHTML = '';
+            
+            if (applications.length === 0) {
+                applicationsGrid.innerHTML = '<div class="no-results">No matching applications found</div>';
+                updatePaginationControls(0);
+                return;
+            }
+
+            // Calculate pagination
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedApplications = applications.slice(startIndex, endIndex);
+
+            paginatedApplications.forEach(([key, data]) => {
+                const card = createApplicationCard(data, key);
+                applicationsGrid.appendChild(card);
+            });
+
+            // Update pagination controls
+            updatePaginationControls(applications.length);
+        }
+
+        // Add these functions for modal handling
+        function showCompletionModal(callback) {
+            const modal = document.getElementById('completionModal');
+            const confirmBtn = document.getElementById('modalConfirm');
+            const cancelBtn = document.getElementById('modalCancel');
+
+            modal.style.display = 'block';
+            setTimeout(() => modal.classList.add('show'), 10);
+
+            function handleConfirm() {
+                callback(true);
+                closeModal();
+                cleanup();
+            }
+
+            function handleCancel() {
+                callback(false);
+                closeModal();
+                cleanup();
+            }
+
+            function closeModal() {
+                modal.classList.remove('show');
+                setTimeout(() => modal.style.display = 'none', 300);
+            }
+
+            function cleanup() {
+                confirmBtn.removeEventListener('click', handleConfirm);
+                cancelBtn.removeEventListener('click', handleCancel);
+            }
+
+            confirmBtn.addEventListener('click', handleConfirm);
+            cancelBtn.addEventListener('click', handleCancel);
+        }
+
+        // Handle logout
+        document.querySelector('.logout-btn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                await signOut(auth);
+                window.location.href = 'index.html?logout=true';
+            } catch (error) {
+                console.error('Error signing out:', error);
+                alert('Error signing out. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
