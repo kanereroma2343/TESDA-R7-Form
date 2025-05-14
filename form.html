@@ -1027,6 +1027,7 @@
                             <input type="text" value="TMC-" readonly style="width: 60px; margin-right: 5px;">
                             <input type="text" id="tm_cert_number" name="tm_cert_number" placeholder="Enter 14 digits" required pattern="^\d{14}$" title="Enter 14 digits only" maxlength="14" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                         </div>
+                        <small id="tm_cert_error" style="color: red; display: none;">TM Certificate Number must be exactly 14 digits.</small>
                     </div>
                     
                     <div class="form-row grid">
@@ -1098,6 +1099,19 @@
                 'nttcstatus'
             ];
             
+            // Validate TM Certificate Number
+            const tmCertNumber = document.getElementById('tm_cert_number').value.trim();
+            const tmCertError = document.getElementById('tm_cert_error');
+            
+            if (!/^\d{14}$/.test(tmCertNumber)) {
+                tmCertError.style.display = 'block';
+                document.getElementById('tm_cert_number').classList.add('missing-field');
+                return false;
+            } else {
+                tmCertError.style.display = 'none';
+                document.getElementById('tm_cert_number').classList.remove('missing-field');
+            }
+            
             let missingFields = [];
             
             requiredFields.forEach(field => {
@@ -1126,7 +1140,7 @@
 
             const tmCertNumberInput = form.querySelector('[name="tm_cert_number"]');
             if (tmCertNumberInput) {
-                const tmCertNumberWithPrefix = '' + tmCertNumberInput.value.padStart(14, '0'); // Ensure it is 14 digits
+                const tmCertNumberWithPrefix = 'TMC-' + tmCertNumberInput.value.padStart(14, '0'); // Ensure it is 14 digits
                 tmCertNumberInput.value = tmCertNumberWithPrefix; // Update the input value
             }
 
