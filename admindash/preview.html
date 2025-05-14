@@ -992,14 +992,15 @@
                     <div class="form-group">
                         <label for="tm_cert_number">TM Certificate Number</label>
                         <div style="display: flex; align-items: center;">
-                            <input type="text" value="TMC-" readonly style="width: 60px; background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px; margin-right: -1px; border-radius: 4px 0 0 4px;">
+                            <span style="width: 60px; background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px; margin-right: -1px; border-radius: 4px 0 0 4px; display: flex; align-items: center;">TMC-</span>
                             <input type="text" id="tm_cert_number_actual" name="tm_cert_number_actual" 
                                 placeholder="Enter 14 digits" 
                                 required 
                                 pattern="[0-9]{14}" 
                                 maxlength="14" 
-                                style="width: calc(100% - 60px); border-radius: 0 4px 4px 0;"
-                                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 14);">
+                                readonly
+                                style="width: calc(100% - 60px); border-radius: 0 4px 4px 0; background-color: #f0f0f0; cursor: not-allowed;"
+                                onfocus="this.blur()">
                         </div>
                     </div>
                     
