@@ -1,0 +1,24 @@
+{
+  "name": "tesda-r7-form",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kanereroma2343/TESDA-R7-Form.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kanereroma2343/TESDA-R7-Form/issues"
+  },
+  "homepage": "https://github.com/kanereroma2343/TESDA-R7-Form#readme",
+  "description": "",
+  "dependencies": {
+    "firebase": "^11.8.0",
+    "firebase-admin": "^13.4.0"
+  }
+}
